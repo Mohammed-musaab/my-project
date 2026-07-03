@@ -39,19 +39,18 @@ pipeline {
         }
         
         
-        stage('DeployToProduction') {
-            when {
-                branch 'master'
-            }
-            steps {
-                input 'Deploy to Production?'
-                milestone(1)
-                kubernetesDeploy(
-                    kubeconfigId: 'kubeconfig',
-                    configs: 'my-app-deploy.yaml',
-                    enableConfigSubstitution: true
-                )
-            }
+       stage('DeployToProduction') {
+    when {
+        branch 'master'
+    }
+    steps {
+        input 'Deploy to Production?'
+        milestone(1)
+
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+            sh 'kubectl apply -f my-app-deploy.yaml'
         }
+    }
+}
     }
 }
