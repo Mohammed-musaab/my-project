@@ -48,8 +48,10 @@ pipeline {
         milestone(1)
 
         withKubeConfig([credentialsId: 'kubeconfig']) {
-            sh 'kubectl apply -f my-app-deploy.yaml'
-        }
+    sh 'kubectl config view --minify'
+    sh 'kubectl cluster-info'
+    sh 'kubectl apply -f my-app-deploy.yaml'
+}
     }
 }
     }
